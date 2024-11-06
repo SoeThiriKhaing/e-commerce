@@ -8,7 +8,7 @@ class AppWidget {
 
   static TextStyle LightTextStyle() {
     return TextStyle(
-        color: Colors.black54, fontSize: 20.0, fontWeight: FontWeight.bold);
+        color: Colors.black54, fontSize: 18.0, fontWeight: FontWeight.bold);
   }
 
   static TextStyle semiboldTextStyle() {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:shop/pages/signup.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});
@@ -32,26 +32,29 @@ class _OnboardingState extends State<Onboarding> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              SizedBox(
-                height: 30,
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                    margin: EdgeInsets.only(right: 20.0),
-                    padding: EdgeInsets.all(30.0),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      shape: BoxShape.circle,
-                    ),
-                    //borderRadius: BorderRadius.circular(30)),
-                    child: Text(
-                      "Next",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Signup()));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(right: 20.0),
+                      padding: EdgeInsets.all(30.0),
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        //shape: BoxShape.circle,
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Text(
+                        "Next",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ],
