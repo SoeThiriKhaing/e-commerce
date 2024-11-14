@@ -7,10 +7,10 @@ import 'package:shop/widget/support_widget.dart';
 class ProductType extends StatefulWidget {
   final String category;
 
-  ProductType({
-    Key? key,
+  const ProductType({
+    super.key,
     required this.category,
-  }) : super(key: key);
+  });
 
   @override
   State<ProductType> createState() => _ProductTypeState();

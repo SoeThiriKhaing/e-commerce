@@ -277,7 +277,9 @@ class _HomeState extends State<Home> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ProductType(category: categoryName,),
+                  builder: (context) => ProductType(
+                    category: categoryName,
+                  ),
                 ),
               );
             },
@@ -286,6 +288,8 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
+
 
   Widget buildResultCard(Map<String, dynamic> data) {
     return GestureDetector(
