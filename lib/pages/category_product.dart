@@ -4,18 +4,22 @@ import 'package:shop/pages/product_detail.dart';
 import 'package:shop/services/database.dart';
 import 'package:shop/widget/support_widget.dart';
 
+// ignore: must_be_immutable
 class CategoryProduct extends StatefulWidget {
-  String category;
-  CategoryProduct({super.key, required this.category});
+  String type;
+  CategoryProduct({
+    super.key,
+    required this.type,
+  });
 
   @override
   State<CategoryProduct> createState() => _CategoryProductState();
 }
 
 class _CategoryProductState extends State<CategoryProduct> {
-  Stream? CategoryStream;
+  Stream? categoryStream;
   getontheload() async {
-    CategoryStream = await DatabaseMethods().getProduct(widget.category);
+    categoryStream = await DatabaseMethods().getProduct(widget.type);
     setState(() {});
   }
 
@@ -27,7 +31,7 @@ class _CategoryProductState extends State<CategoryProduct> {
 
   Widget allProduct() {
     return StreamBuilder(
-        stream: CategoryStream,
+        stream: categoryStream,
         builder: (context, AsyncSnapshot snapshot) {
           return snapshot.hasData
               ? GridView.builder(
@@ -40,10 +44,8 @@ class _CategoryProductState extends State<CategoryProduct> {
                   itemBuilder: (context, index) {
                     DocumentSnapshot ds = snapshot.data.docs[index];
                     return Container(
-                      // margin: EdgeInsets.only(left: 40.0),
-                      //margin: EdgeInsets.only(right: 20.0),
                       padding:
-                          EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+                          EdgeInsets.symmetric(horizontal: 2.0, vertical: 5.0),
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10.0)),
@@ -66,10 +68,13 @@ class _CategoryProductState extends State<CategoryProduct> {
                                 margin: EdgeInsets.only(bottom: 20.0),
                                 child: Text(
                                   ds["Price"],
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                      color: Color(0xFFfd6f3e),
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold),
+                                    color: Color(0xFFfd6f3e),
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                               SizedBox(

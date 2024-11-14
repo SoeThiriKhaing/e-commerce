@@ -3,10 +3,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:random_string/random_string.dart';
+import 'package:shop/services/database.dart';
 import 'package:shop/widget/support_widget.dart';
 
 class AddCategories extends StatefulWidget {
-  const AddCategories({Key? key}) : super(key: key);
+  const AddCategories({super.key});
 
   @override
   AddCategoriesState createState() => AddCategoriesState();
@@ -17,36 +19,37 @@ class AddCategoriesState extends State<AddCategories> {
   File? _imageFile;
   final picker = ImagePicker();
 
-  Future<void> _pickImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _imageFile = File(pickedFile.path);
-      });
+  Future getImage() async {
+    var image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      _imageFile = File(image.path);
     }
-  }
-
-  Future<String?> _uploadImage(File image) async {
-    String fileName = DateTime.now().toString();
-    Reference storageRef =
-        FirebaseStorage.instance.ref().child("categories/$fileName");
-    UploadTask uploadTask = storageRef.putFile(image);
-    TaskSnapshot snapshot = await uploadTask;
-    return await snapshot.ref.getDownloadURL();
+    setState(() {});
   }
 
   Future<void> _saveCategory() async {
-    if (_imageFile != null && _categoryNameController.text.isNotEmpty) {
-      String? imageUrl = await _uploadImage(_imageFile!);
-      if (imageUrl != null) {
-        await FirebaseFirestore.instance.collection('categories').add({
-          'name': _categoryNameController.text,
-          'image': imageUrl,
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Category added successfully")));
-        Navigator.pop(context);
-      }
+    if (_imageFile != null && _categoryNameController.text != "") {
+      String addId = randomAlphaNumeric(10);
+      Reference firebaseStorageRef =
+          FirebaseStorage.instance.ref().child("BlocImage").child(addId);
+      final UploadTask task = firebaseStorageRef.putFile(_imageFile!);
+      var downloadUrl = await (await task).ref.getDownloadURL();
+
+      Map<String, dynamic> addCategory = {
+        "name": _categoryNameController.text,
+        "image": downloadUrl,
+      };
+      await DatabaseMethods()
+          .addCategories(addCategory, _categoryNameController.text)
+          .then((value) async {
+        await DatabaseMethods().addAllCategories(addCategory);
+        _imageFile = null;
+        _categoryNameController.text = "";
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.green,
+            content: Text("Category added successfully")));
+      });
     }
   }
 
@@ -69,7 +72,7 @@ class AddCategoriesState extends State<AddCategories> {
         child: Column(
           children: [
             GestureDetector(
-              onTap: _pickImage,
+              onTap: getImage,
               child: Container(
                 height: 150,
                 width: 150,

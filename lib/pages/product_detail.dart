@@ -12,6 +12,7 @@ class ProductDetail extends StatefulWidget {
   final String image, name, price, detail;
 
   const ProductDetail({
+    super.key,
     required this.image,
     required this.name,
     required this.price,
@@ -25,9 +26,9 @@ class ProductDetail extends StatefulWidget {
 class _ProductDetailState extends State<ProductDetail> {
   String? name, email, image;
   getthesharedpref() async {
-    name = await SharePreferencesHelper().getUserName();
-    email = await SharePreferencesHelper().getUserEmail();
-    image = await SharePreferencesHelper().getUserImage();
+    name = await SharePreferencesHelper.getUserName();
+    email = await SharePreferencesHelper.getUserEmail();
+    image = await SharePreferencesHelper.getUserImage();
     setState(() {});
   }
 
@@ -48,97 +49,109 @@ class _ProductDetailState extends State<ProductDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xfff2f2f2),
-      body: Container(
-        padding: const EdgeInsets.only(top: 60.0, left: 10.0),
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                Center(
-                  child: Image.network(
-                    widget.image,
-                    height: 400,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 10.0),
-                    padding: const EdgeInsets.all(15.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(),
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    child: const Icon(Icons.arrow_back_ios_new_outlined),
-                  ),
-                ),
-              ],
-            ),
-            Expanded(
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 20.0, horizontal: 20.0),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius:
-                      BorderRadius.only(topLeft: Radius.circular(20.0)),
-                ),
-                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.only(top: 60.0, left: 10.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Stack(
                       children: [
-                        Text(
-                          widget.name,
-                          style: AppWidget.boldTextStyle(),
+                        Center(
+                          child: Image.network(
+                            widget.image,
+                            height: 400,
+                          ),
                         ),
-                        Text(
-                          widget.price,
-                          style: AppWidget.seeAllTextStyle(),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 10.0),
+                            padding: const EdgeInsets.all(15.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(),
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            child:
+                                const Icon(Icons.arrow_back_ios_new_outlined),
+                          ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20.0),
-                    Text(
-                      "Details",
-                      style: AppWidget.semiboldTextStyle(),
-                    ),
-                    const SizedBox(height: 10.0),
-                    Text(widget.detail),
-                    const SizedBox(height: 90.0),
-                    GestureDetector(
-                      onTap: () {
-                        makePayment(widget.price);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 20.0),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFfd6f3e),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        child: const Center(
-                          child: Text(
-                            "Buy Now",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                            ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20.0, horizontal: 20.0),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius:
+                            BorderRadius.only(topLeft: Radius.circular(20.0)),
+                      ),
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                widget.name,
+                                style: AppWidget.boldTextStyle(),
+                              ),
+                              Text(
+                                widget.price,
+                                style: AppWidget.seeAllTextStyle(),
+                              ),
+                            ],
                           ),
-                        ),
+                          const SizedBox(height: 20.0),
+                          Text(
+                            "Details",
+                            style: AppWidget.semiboldTextStyle(),
+                          ),
+                          const SizedBox(height: 10.0),
+                          Text(widget.detail),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+          //here
+
+          GestureDetector(
+            onTap: () {
+              makePayment(widget.price);
+            },
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(right: 20.0, left: 20.0, bottom: 10.0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFfd6f3e),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                width: MediaQuery.of(context).size.width,
+                child: const Center(
+                  child: Text(
+                    "Buy Now",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

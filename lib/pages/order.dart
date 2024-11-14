@@ -17,7 +17,7 @@ class _OrderState extends State<Order> {
 
   // Retrieve the user's email from shared preferences
   Future<void> getthesharedpref() async {
-    email = await SharePreferencesHelper().getUserEmail();
+    email = await SharePreferencesHelper.getUserEmail();
   }
 
   // Load data only once on widget initialization

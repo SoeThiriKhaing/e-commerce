@@ -10,16 +10,54 @@ class DatabaseMethods {
         .set(userInfoMap);
   }
 
+  Future<Stream<QuerySnapshot>> getUser(String email) async {
+    return FirebaseFirestore.instance
+        .collection("users")
+        .where("Email", isEqualTo: email)
+        .snapshots();
+  }
+
   Future addAllProducts(Map<String, dynamic> userInfoMap) async {
     return await FirebaseFirestore.instance
         .collection("product")
         .add(userInfoMap);
   }
 
-  Future addProduct(
-      Map<String, dynamic> userInfoMap, String categoryname) async {
+  Future addAllProductsType(Map<String, dynamic> userInfoMap) async {
+    return await FirebaseFirestore.instance
+        .collection("types")
+        .add(userInfoMap);
+  }
+
+  Future addProduct(Map<String, dynamic> userInfoMap, String product) async {
+    return await FirebaseFirestore.instance
+        .collection(product)
+        .add(userInfoMap);
+  }
+
+  Future addType(Map<String, dynamic> userInfoMap, String categoryname) async {
     return await FirebaseFirestore.instance
         .collection(categoryname)
+        .add(userInfoMap);
+  }
+
+  Future addCategories(
+      Map<String, dynamic> userInfoMap, String category) async {
+    return await FirebaseFirestore.instance
+        .collection(category)
+        .add(userInfoMap);
+  }
+
+  Future addAllCategories(Map<String, dynamic> userInfoMap) async {
+    return await FirebaseFirestore.instance
+        .collection("categories")
+        .add(userInfoMap);
+  }
+
+  Future addProductType(
+      Map<String, dynamic> userInfoMap, String producttypename) async {
+    return await FirebaseFirestore.instance
+        .collection(producttypename)
         .add(userInfoMap);
   }
 
@@ -30,8 +68,16 @@ class DatabaseMethods {
         .update({"Status": "Delivered"});
   }
 
-  Future<Stream<QuerySnapshot>> getProduct(String category) async {
-    return await FirebaseFirestore.instance.collection(category).snapshots();
+  Future<Stream<QuerySnapshot>> getProduct(String type) async {
+    return await FirebaseFirestore.instance.collection(type).snapshots();
+  }
+
+  Future<Stream<QuerySnapshot>> getProductType(
+      String category) async {
+    return FirebaseFirestore.instance
+        .collection("types")
+        .where("category", isEqualTo: category)
+        .snapshots();
   }
 
   Future<Stream<QuerySnapshot>> allOrder() async {

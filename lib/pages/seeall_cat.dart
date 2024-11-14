@@ -41,7 +41,8 @@ class _CategoryListPageState extends State<CategoryListPage> {
                   image: widget.categories[index],
 
                   name: widget.categoryNames[index],
-                  isCategoryListPage: true, // Hides the arrow_forward icon
+                  isCategoryListPage: true,
+                  onTap: () {}, // Hides the arrow_forward icon
                 ),
               ),
               const SizedBox(height: 10.0),

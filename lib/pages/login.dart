@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop/admin/home_admin.dart';
 import 'package:shop/pages/bottomnav.dart';
 import 'package:shop/pages/signup.dart';
+import 'package:shop/services/share_preferences.dart';
 import 'package:shop/widget/support_widget.dart';
 
 class Login extends StatefulWidget {
@@ -13,15 +16,29 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  String email = "", password = "";
+  String email = "", password = "", name = "", image = "";
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   final _formkey = GlobalKey<FormState>();
 
   userLogin() async {
     try {
-      await FirebaseAuth.instance
+      UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
+      String userId = userCredential.user!.uid;
+
+      // Clear previous user data
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+
+      // Save new user data
+      SharePreferencesHelper preferencesHelper = SharePreferencesHelper();
+      await SharePreferencesHelper.saveUserId(userId);
+      await SharePreferencesHelper.saveUserEmail(email);
+      await SharePreferencesHelper.saveUserName(name);
+      await SharePreferencesHelper.saveUserImage(image);
+
       if (email == "soethiri@gmail.com" && password == "123456") {
         Navigator.push(
           context,
